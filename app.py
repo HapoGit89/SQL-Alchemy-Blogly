@@ -1,6 +1,6 @@
 """Blogly application."""
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect
 from models import db, connect_db, User
 
 app = Flask(__name__)
@@ -42,3 +42,48 @@ def show_details(userid):
 def show_add_form():
     """ render User Add form"""
     return render_template("add.html")
+
+
+@app.route("/newuser", methods = ["POST"])
+def add_user():
+    """Adds user to database and redirects to User List"""
+    first_name = request.form['first_name']
+    last_name = request.form['last_name']
+    url = request.form['image_url']
+
+    user = User(first_name = first_name, last_name=last_name, image_url=url)
+    db.session.add(user)
+    db.session.commit()
+    return redirect ("/")
+
+@app.route("/user/<userid>/delete")
+def delete_user(userid):
+    print(f"this is before the request, user is is {userid}")
+    user = User.query.get(userid)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect ('/')
+
+
+@app.route("/user/<userid>/edit", methods = ["GET"])
+def edit_user_page(userid):
+    user = user = User.query.get(userid)
+    return render_template("edit.html", user=user)
+
+
+@app.route("/user/<userid>/edit", methods = ["POST"])
+def edit_user(userid):
+    user = user = User.query.get(userid)
+    user.first_name = request.form['first_name']
+    user.last_name = request.form['last_name']
+    user.image_url = request.form['image_url']
+    db.session.add(user)
+    db.session.commit()
+    return redirect (f"/{userid}")
+
+
+
+
+
+
+
