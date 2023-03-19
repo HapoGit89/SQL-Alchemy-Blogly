@@ -15,13 +15,6 @@ with app.app_context():
     db.create_all()
 
 
-# with app.app_context():
-#     user1 = User(first_name="Thorsten", last_name= "Test")
-#     user2 = User(first_name="Dominic", last_name= "Doctest")
-#     db.session.add(user1)
-#     db.session.add(user2)
-#     db.session.commit()    
-
 @app.route("/")
 def list_users():
     """List users and show add form."""
@@ -56,9 +49,8 @@ def add_user():
     db.session.commit()
     return redirect ("/")
 
-@app.route("/user/<userid>/delete")
+@app.route("/user/<userid>/delete", methods=["POST"])
 def delete_user(userid):
-    print(f"this is before the request, user is is {userid}")
     user = User.query.get(userid)
     db.session.delete(user)
     db.session.commit()

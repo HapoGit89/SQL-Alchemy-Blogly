@@ -10,8 +10,8 @@
 <body>
     <img src="{{user.image_url}}">
     <h1>{{ user.first_name }} {{ user.last_name }}</h1>
-    <button onclick="window.location.href='/user/{{user.id}}/edit'">Edit</button>
-    <button onclick="window.location.href='/user/{{user.id}}/delete'">Delete</button>
-    <button onclick="window.location.href='/'">Back</button>
+    <button onclick="window.location.href='/user/{{user.id}}/edit'" class="edit">Edit</button>
+    <button onclick="window.location.href='/user/{{user.id}}/delete'" class="delete">Delete</button>
+    <button onclick="window.location.href='/'" class="back">Back</button>
 </body>
 </html>
