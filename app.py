@@ -84,6 +84,10 @@ def show_post_form(userid):
 def add_new_post(userid):
     title = request.form['title']
     content = request.form['content']
+    if not (title or content):
+        user = user = User.query.get(userid)
+        return render_template("newpost.html", user= user, error = "Please fill out both fields")
+        
     db.session.add(Post(title = title, content = content, user_id=userid))
     db.session.commit()
     return redirect(f"/{userid}")
