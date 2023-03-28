@@ -24,8 +24,8 @@ class User (db.Model):
                           nullable = False)
     last_name = db.Column(db.String(20),
                           nullable = False)
-    image_url = db.Column(db.Text,
-                          nullable = True)
+    image_url = db.Column(db.Text,      
+                          default = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png")
     
 
 class Post (db.Model):
@@ -45,5 +45,5 @@ class Post (db.Model):
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'))
     
-    user = db.relationship('User', cascade = "all,delete")
+    user = db.relationship('User')
 

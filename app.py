@@ -45,7 +45,10 @@ def add_user():
     last_name = request.form['last_name']
     url = request.form['image_url']
 
-    user = User(first_name = first_name, last_name=last_name, image_url=url)
+    if not (url):
+        user = User(first_name = first_name, last_name=last_name)
+    else:
+        user = User(first_name = first_name, last_name=last_name, image_url=url)
     db.session.add(user)
     db.session.commit()
     return redirect ("/")
@@ -91,6 +94,21 @@ def add_new_post(userid):
     db.session.add(Post(title = title, content = content, user_id=userid))
     db.session.commit()
     return redirect(f"/{userid}")
+
+
+@app.route("/posts/<postid>")
+def show_post(postid):
+    post = Post.query.filter_by(id = postid).one()
+    user = User.query.filter_by(id=post.user_id).one()
+    return render_template("postdetails.html", user = user, post = post) 
+
+@app.route("/posts/<postid>/delete")
+def delete_post(postid):
+    post = Post.query.filter_by(id = postid).one()
+    user = User.query.filter_by(id=post.user_id).one()
+    db.session.delete(post)
+    db.session.commit()
+    return redirect(f"/{user.id}")
                           
 
 
