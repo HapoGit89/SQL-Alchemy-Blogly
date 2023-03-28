@@ -28,7 +28,8 @@ def show_details(userid):
     """List users and show add form."""
 
     user = User.query.get_or_404(userid)
-    return render_template("details.html", user=user)
+    posts= Post.query.filter_by(user_id = userid).all()
+    return render_template("details.html", user=user, posts=posts)
 
 
 @app.route("/add")
@@ -49,7 +50,7 @@ def add_user():
     db.session.commit()
     return redirect ("/")
 
-@app.route("/user/<userid>/delete", methods=["POST"])
+@app.route("/user/<userid>/delete", methods=["GET"])
 def delete_user(userid):
     user = User.query.get(userid)
     db.session.delete(user)
@@ -72,6 +73,12 @@ def edit_user(userid):
     db.session.add(user)
     db.session.commit()
     return redirect (f"/{userid}")
+
+
+@app.route("/user/<userid>/posts/new", methods = ["GET"])
+def show_post_form(userid):
+    user = user = User.query.get(userid)
+    return render_template("newpost.html", user=user)
 
 
 

@@ -8,10 +8,22 @@
     <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
+    <div id="userdetails">
     <img src="{{user.image_url}}">
     <h1>{{ user.first_name }} {{ user.last_name }}</h1>
     <button onclick="window.location.href='/user/{{user.id}}/edit'" class="edit">Edit</button>
     <button onclick="window.location.href='/user/{{user.id}}/delete'" class="delete">Delete</button>
     <button onclick="window.location.href='/'" class="back">Back</button>
+    </div>
+    <div id="postlist">
+        <h1>Posts</h1>
+        <ul>
+            {% for post in posts %}
+            <li>{{post.title}}</li>
+            {% endfor %}
+        </ul>
+
+    </div>
+    
 </body>
 </html>

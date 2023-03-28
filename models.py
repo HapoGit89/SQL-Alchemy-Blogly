@@ -44,4 +44,6 @@ class Post (db.Model):
                            default = datetime.fromtimestamp(time.time()) )
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'))
+    
+    user = db.relationship('User', cascade = "all,delete")
 
