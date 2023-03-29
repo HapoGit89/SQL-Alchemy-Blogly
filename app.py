@@ -25,7 +25,7 @@ def list_users():
 
 @app.route("/<userid>")
 def show_details(userid):
-    """List users and show add form."""
+    """Show user details and user posts."""
 
     user = User.query.get_or_404(userid)
     posts= Post.query.filter_by(user_id = userid).all()
