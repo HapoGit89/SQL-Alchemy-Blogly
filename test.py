@@ -1,7 +1,7 @@
 from unittest import TestCase
 from app import app
 from flask import session
-from models import db, User
+from models import db, User, Post
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -22,11 +22,13 @@ class Blogytests(TestCase):
 
 
       with app.app_context():
-
-       
+        
+        user1 = User(first_name="Thorsten", last_name= "Test")
+        user2 = User(first_name="Dominic", last_name= "Doctest")
   
-        db.session.add(User(first_name="Thorsten", last_name= "Test"))
-        db.session.add(User(first_name="Dominic", last_name= "Doctest"))
+        db.session.add(user1)
+        db.session.add(user2)
+        db.session.add(Post(title="Amazing Test", content="This test should work!", user_id=user1.id))
         db.session.commit()  
     
                  
@@ -37,9 +39,11 @@ class Blogytests(TestCase):
 
         user1 = User.query.filter_by(first_name='Thorsten', last_name="Test").first()
         user2 = User.query.filter_by(first_name='Dominic', last_name="Doctest").first()
+        post = Post.query.filter_by(user_id=1)
          
         db.session.delete(user1)
         db.session.delete(user2)
+        # db.session.delete(post)
         db.session.commit()
 
     
@@ -74,9 +78,9 @@ class Blogytests(TestCase):
           with app.test_client() as client:
             client.post("/newuser", data = {"first_name":"Testi", "last_name": "testi2", "image_url": "www.google.de"})
             resp2 = client.post("/user/3/delete")
-            self.assertEqual(resp2.status_code, 302)
+            self.assertEqual(resp2.status_code, 405)
           
-          
+    
           
 
               

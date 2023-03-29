@@ -109,10 +109,23 @@ def delete_post(postid):
     db.session.delete(post)
     db.session.commit()
     return redirect(f"/{user.id}")
+
+
+@app.route("/posts/<postid>/edit", methods = ["GET"])
+def show_post_edit(postid):
+    post = Post.query.filter_by(id = postid).one()
+    return render_template ("editpost.html", post=post)
                           
 
 
-
+@app.route("/posts/<postid>/edit", methods = ["POST"])
+def edit_post(postid):
+    post = Post.query.filter_by(id = postid).one()
+    post.title = request.form['title']
+    post.content = request.form['content']
+    db.session.add(post)
+    db.session.commit()
+    return redirect (f"/posts/{post.id}")
 
 
 
