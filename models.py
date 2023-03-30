@@ -33,7 +33,7 @@ class User (db.Model):
     image_url = db.Column(db.Text,      
                           default = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png")
     
-    
+    posts = db.relationship("Post", backref="user", cascade="all, delete-orphan")
     
 
 class Post (db.Model):
@@ -53,9 +53,8 @@ class Post (db.Model):
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'))
     
-    user = db.relationship('User')
 
-    posttags = db.relationship('PostTag', backref = 'posts')
+    posttags = db.relationship('PostTag', backref = 'posts', cascade="all, delete-orphan")
 
     tag = db.relationship('Tag', secondary = 'posttags', backref ='posts')
 
@@ -76,7 +75,7 @@ class Tag(db.Model):
                      nullable = False,
                     unique = True)
     
-    taggedposts = db.relationship('PostTag', backref = 'tags')
+    taggedposts = db.relationship('PostTag', backref = 'tags', cascade="all, delete-orphan")
 
     postings = db.relationship('Post', secondary = 'posttags', backref = 'tags')
     
