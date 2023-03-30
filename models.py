@@ -54,9 +54,9 @@ class Post (db.Model):
                         db.ForeignKey('users.id'))
     
 
-    posttags = db.relationship('PostTag', backref = 'posts', cascade="all, delete-orphan")
+    posttags = db.relationship('PostTag', viewonly=True, backref = 'posts', cascade="all, delete-orphan")
 
-    tag = db.relationship('Tag', secondary = 'posttags', backref ='posts')
+    tag = db.relationship('Tag', viewonly = True, secondary = 'posttags', backref ='posts')
 
 class Tag(db.Model):
     """Tag"""
@@ -64,7 +64,7 @@ class Tag(db.Model):
     def __repr__(self):
         """Show User Info"""
         p = self
-        return f"Tag {p.id}, name : {p.name}"
+        return f"Tag {p.id}, name : {p.tag_name}"
 
     __tablename__ = "tags"
 

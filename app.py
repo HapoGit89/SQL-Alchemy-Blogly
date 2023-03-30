@@ -139,6 +139,13 @@ def edit_post(postid):
     return redirect (f"/posts/{post.id}")
 
 
+@app.route("/tags/<tagid>/delete")
+def delete_tag(tagid):
+    tag = Tag.query.filter_by(id =tagid).one()
+    print(tag)
+    db.session.delete(tag)
+    db.session.commit()
+    return redirect ("/")
 
 @app.route("/tags/new")
 def show_tag_form():
