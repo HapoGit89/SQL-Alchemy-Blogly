@@ -55,9 +55,11 @@ class Post (db.Model):
     
     user = db.relationship('User')
 
-    posttags = db.relationship('PostTag', backref = "post")
+    posttags = db.relationship('PostTag', backref = 'posts')
 
-class Tag (db.Model):
+    tag = db.relationship('Tag', secondary = 'posttags', backref ='posts')
+
+class Tag(db.Model):
     """Tag"""
 
     def __repr__(self):
@@ -70,23 +72,26 @@ class Tag (db.Model):
     id = db.Column(db.Integer,
                    primary_key = True,
                    autoincrement = True)
-    name = db.Column(db.String(20),
-                     nullable = False)
+    tag_name = db.Column(db.String(20),
+                     nullable = False,
+                    unique = True)
     
-    taggedposts = db.relationship('PostTag', backref = 'tag')
+    taggedposts = db.relationship('PostTag', backref = 'tags')
+
+    postings = db.relationship('Post', secondary = 'posttags', backref = 'tags')
     
 
 
-class PostTag (db.Model):
+class PostTag(db.Model):
     """Post and Tags M2M"""
 
-    __tablename__ = "posttag"
+    __tablename__ = "posttags"
 
     post_id = db.Column(db.Integer,
-               db.ForeignKey("posts.id"),
+               db.ForeignKey('posts.id'),
                primary_key= True)
     tag_id = db.Column(db.Integer,
-               db.ForeignKey("tags.id"),
+               db.ForeignKey('tags.id'),
                primary_key= True)
 
 

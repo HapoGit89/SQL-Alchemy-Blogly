@@ -159,4 +159,18 @@ def show_tag_details(tagid):
     print (posts)
     return render_template("showtag.html", posts = posts, tag=tag)
 
+@app.route("/tags/<tagid>/edit")
+def show_tag_edit(tagid):
+    tag = Tag.query.filter_by(id=tagid).one()
+    return render_template("edittag.html", tag = tag)
+
+
+@app.route("/tags/<tagid>/edit", methods = ["POST"])
+def edit_tag(tagid):
+    tag = Tag.query.filter_by(id=tagid).one()
+    tag.tag_name = request.form['name']
+    db.session.add(tag)
+    db.session.commit()
+    return redirect(f"/tags/{tag.id}")
+
 
