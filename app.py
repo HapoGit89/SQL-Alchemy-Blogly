@@ -1,7 +1,7 @@
 """Blogly application."""
 
 from flask import Flask, render_template, request, redirect
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
@@ -20,7 +20,8 @@ def list_users():
     """List users and show add form."""
 
     users = User.query.all()
-    return render_template("users.html", users=users)
+    tags = Tag.query.all()
+    return render_template("users.html", users=users, tags = tags)
 
 
 @app.route("/<userid>")
@@ -129,5 +130,13 @@ def edit_post(postid):
 
 
 
+@app.route("/tags/new")
+def show_tag_form():
+    return render_template("createtag.html")
 
-
+@app.route("/tags/new", methods = ["POST"])
+def create_tag():
+    name = request.form['name']
+    db.session.add(Tag(name= name))
+    db.session.commit()
+    return redirect ("/")

@@ -17,6 +17,12 @@ class User (db.Model):
 
     __tablename__ = "users"
 
+    def __repr__(self):
+        """Show User Info"""
+        p = self
+        return f"User {p.id}, {p.first_name} {p.last_name}"
+
+
     id = db.Column(db.Integer,
                    primary_key = True,
                    autoincrement = True)
@@ -26,6 +32,8 @@ class User (db.Model):
                           nullable = False)
     image_url = db.Column(db.Text,      
                           default = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png")
+    
+    
     
 
 class Post (db.Model):
@@ -46,4 +54,40 @@ class Post (db.Model):
                         db.ForeignKey('users.id'))
     
     user = db.relationship('User')
+
+    posttags = db.relationship('PostTag', backref = "post")
+
+class Tag (db.Model):
+    """Tag"""
+
+    def __repr__(self):
+        """Show User Info"""
+        p = self
+        return f"Tag {p.id}, name : {p.name}"
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer,
+                   primary_key = True,
+                   autoincrement = True)
+    name = db.Column(db.String(20),
+                     nullable = False)
+    
+    taggedposts = db.relationship('PostTag', backref = 'tag')
+    
+
+
+class PostTag (db.Model):
+    """Post and Tags M2M"""
+
+    __tablename__ = "posttag"
+
+    post_id = db.Column(db.Integer,
+               db.ForeignKey("posts.id"),
+               primary_key= True)
+    tag_id = db.Column(db.Integer,
+               db.ForeignKey("tags.id"),
+               primary_key= True)
+
+
 

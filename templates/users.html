@@ -17,5 +17,13 @@
       </ul>
 
       <button onclick="window.location.href='/add'" >Add User</button>
+      <h1>Tags</h1>
+    <ul>
+        {% for tag in tags %}
+        <li><a href="/tags/{{ tag.id }}">{{ tag.name}} </a></li>
+        {% endfor %}
+      </ul>
+      <button onclick="window.location.href='/tags/new'" >Add Tag</button>
+
 </body>
 </html>
