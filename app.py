@@ -97,7 +97,13 @@ def add_new_post(userid):
         
     db.session.add(Post(title = title, content = content, user_id=userid))
     db.session.commit()
-    print(tags)
+    post = Post.query.filter_by(title = title, content = content).one()
+    for tag in tags:
+        tagobj = Tag.query.filter_by(tag_name = f"{tag}").one()
+        posttag = PostTag(post_id = post.id, tag_id = tagobj.id)
+        db.session.add(posttag)
+        db.session.commit()
+        
     return redirect(f"/{userid}")
 
 
@@ -141,6 +147,16 @@ def show_tag_form():
 @app.route("/tags/new", methods = ["POST"])
 def create_tag():
     name = request.form['name']
-    db.session.add(Tag(name= name))
+    db.session.add(Tag(tag_name= name))
     db.session.commit()
     return redirect ("/")
+
+
+@app.route("/tags/<tagid>")
+def show_tag_details(tagid):
+    tag = Tag.query.filter_by(id=tagid).one()
+    posts = tag.posts
+    print (posts)
+    return render_template("showtag.html", posts = posts, tag=tag)
+
+
