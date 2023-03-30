@@ -12,6 +12,11 @@
     <form method="POST" action="/user/{{user.id}}/posts/new">
         <p>Title<input name="title"></p>
         <p>Content  <input name="content"></p>
+        <div id ="tags">
+            {% for tag in tags %}
+           <label for="{{tag.name}}"> {{tag.name}} <input type="checkbox" name = "tag" value="{{tag.name}}"></label>
+            {% endfor %}
+        </div>
         <button class="save">Save</button>
       </form>
       <h2>{{error}}</h2>
