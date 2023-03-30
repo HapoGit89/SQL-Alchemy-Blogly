@@ -71,7 +71,7 @@ class Tag(db.Model):
     id = db.Column(db.Integer,
                    primary_key = True,
                    autoincrement = True)
-    tag_name = db.Column(db.String(20),
+    tag_name = db.Column(db.Text,
                      nullable = False,
                     unique = True)
     
