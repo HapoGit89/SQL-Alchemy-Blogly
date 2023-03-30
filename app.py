@@ -111,7 +111,8 @@ def add_new_post(userid):
 def show_post(postid):
     post = Post.query.filter_by(id = postid).one()
     user = User.query.filter_by(id=post.user_id).one()
-    return render_template("postdetails.html", user = user, post = post) 
+    tags = post.tags
+    return render_template("postdetails.html", user = user, post = post, tags = tags) 
 
 @app.route("/posts/<postid>/delete")
 def delete_post(postid):
@@ -125,17 +126,27 @@ def delete_post(postid):
 @app.route("/posts/<postid>/edit", methods = ["GET"])
 def show_post_edit(postid):
     post = Post.query.filter_by(id = postid).one()
-    return render_template ("editpost.html", post=post)
+    tags = Tag.query.all()
+    return render_template ("editpost.html", post=post, tags = tags)
                           
 
 
 @app.route("/posts/<postid>/edit", methods = ["POST"])
 def edit_post(postid):
     post = Post.query.filter_by(id = postid).one()
+    tags = request.form.getlist('tag')
     post.title = request.form['title']
     post.content = request.form['content']
     db.session.add(post)
     db.session.commit()
+    for tag in post.posttags:
+        db.session.delete(tag)
+        db.session.commit()
+    for tag in tags:
+        tagobj = Tag.query.filter_by(tag_name = f"{tag}").one()
+        posttag = PostTag(post_id = post.id, tag_id = tagobj.id)
+        db.session.add(posttag)
+        db.session.commit()
     return redirect (f"/posts/{post.id}")
 
 
