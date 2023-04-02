@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div id="postdetails">
+   
+    <h1>{{post.title}}</h1>
+    <p>{{post.content}}</p>
+    <p><i>By {{user.first_name}} {{user.last_name}} on {{post.created_at}}</i></p>
+    <button onclick="window.location.href='/posts/{{post.id}}/edit'" class="edit">Edit</button>
+    <button onclick="window.location.href='/posts/{{post.id}}/delete'" class="delete">Delete</button>
+    <button onclick="window.location.href='/{{user.id}}'" class="back">Back</button>
+    </div>
+
+    <div id = "tags">
+        <p><i>tags:</i></p>
+        <ul>
+            {% for tag in tags %}
+            <li><a href="/tags/{{ tag.id }}">{{ tag.tag_name}} </a></li>
+            {% endfor %}
+        </ul>
+    </div>
+   
+
+</body>
+</html>
